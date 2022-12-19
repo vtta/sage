@@ -1,5 +1,13 @@
 # GBBS: Graph Based Benchmark Suite
 
+For sage:
+
+```bash
+go install github.com/bazelbuild/bazelisk@latest
+bazelisk build //sage/...
+./bazel-bin/sage/benchmarks/PageRank/PageRank_main
+```
+
 Organization
 --------
 

@@ -5,6 +5,7 @@
 #include <functional>
 #include <iostream>
 #include <thread>
+#include <atomic>
 
 #ifdef SAGE
 #include <pthread.h>
