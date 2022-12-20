@@ -118,7 +118,7 @@ read_compressed_symmetric_graph(const char* f1, const char* f2) {
     v_data[i].degree = Degrees[i];
   });
 
-  std::function<void()> deletion_fn = [v_data, s0, s1, s0_size] () {
+  std::function<void()> deletion_fn = [v_data = v_data, s0 = s0, s1 = s1, s0_size = s0_size] () {
     pbbslib::free_array(v_data);
     gbbs_io::unmmap(s0, s0_size);
     gbbs_io::unmmap(s1, s0_size);
@@ -172,7 +172,7 @@ read_compressed_asymmetric_graph(const char* f1, const char* f2) {
     v_in_data[i].degree = inDegrees[i];
   });
 
-  std::function<void()> deletion_fn = [v_data, v_in_data, s0, s1, s0_size] () {
+  std::function<void()> deletion_fn = [v_data = v_data, v_in_data = v_in_data, s0 = s0, s1 = s1, s0_size = s0_size] () {
     pbbslib::free_array(v_data);
     pbbslib::free_array(v_in_data);
     gbbs_io::unmmap(s0, s0_size);
@@ -214,7 +214,7 @@ read_symmetric_binary_graph(const char* f1, const char* f2) {
     V[i].offset = o;
   });
 
-  auto deletion_fn = [V, s0, s1, s0_size]() {
+  auto deletion_fn = [V = V, s0 = s0, s1 = s1, s0_size = s0_size]() {
     pbbslib::free_array(V);
     gbbs_io::unmmap(s0, s0_size);
     gbbs_io::unmmap(s1, s0_size);
@@ -268,7 +268,7 @@ read_asymmetric_binary_graph(const char* f1, const char* f2) {
     v_in_data[i].offset = o;
   });
 
-  auto deletion_fn = [v_data, v_in_data, s0, s1, s0_size]() {
+  auto deletion_fn = [v_data = v_data, v_in_data = v_in_data, s0 = s0, s1 = s1, s0_size = s0_size]() {
     pbbslib::free_array(v_data);
     pbbslib::free_array(v_in_data);
     gbbs_io::unmmap(s0, s0_size);
