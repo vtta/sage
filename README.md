@@ -5,9 +5,15 @@ For sage:
 ```bash
 # you might need `cargo install xq`
 go install github.com/bazelbuild/bazelisk@latest
-bazelisk build //sage/...
-./bazel-bin/sage/benchmarks/PageRank/PageRank_main
+CC=clang CXX=clang++ bazelisk build //utils/... //sage/...
 cat bazel-bin/sage/compile_commands.json | xq ".[].directory = \"$PWD\"" > compile_commands.json
+wget https://snap.stanford.edu/data/twitter-2010-ids.csv.gz -o inputs/twitter-2010-ids.csv.gz
+gzip -dkq inputs/twitter-2010-ids.csv.gz
+bazel-bin/utils/snap_converter -s -i inputs/twitter-2010.txt -o data/twitter-2010.adj
+bazel-bin/utils/compressor -s -o inputs/twitter-2010.bcsr inputs/twitter-2010.adj
+cp inputs/twitter-2010.bcsr /mnt/pmem0/
+cp inputs/twitter-2010.bcsr /mnt/pmem1/
+bazel-bin/sage/benchmarks/PageRank/PageRank_main -rounds 1 -s -b -c -f1 /mnt/pmem0/twitter-2010.bcsr -f2 /mnt/pmem1/twitter-2010.bcsr
 ```
 
 Organization
