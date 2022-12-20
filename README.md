@@ -3,9 +3,11 @@
 For sage:
 
 ```bash
+# you might need `cargo install xq`
 go install github.com/bazelbuild/bazelisk@latest
 bazelisk build //sage/...
 ./bazel-bin/sage/benchmarks/PageRank/PageRank_main
+cat bazel-bin/sage/compile_commands.json | xq ".[].directory = \"$PWD\"" > compile_commands.json
 ```
 
 Organization

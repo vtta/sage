@@ -39,3 +39,12 @@ http_archive(
 
 load("@pybind11_bazel//:python_configure.bzl", "python_configure")
 python_configure(name = "local_config_python")
+
+http_archive(
+    name = "com_grail_bazel_compdb",
+    strip_prefix = "bazel-compilation-database-0.5.2",
+    urls = ["https://github.com/grailbio/bazel-compilation-database/archive/0.5.2.tar.gz"],
+)
+
+load("@com_grail_bazel_compdb//:deps.bzl", "bazel_compdb_deps")
+bazel_compdb_deps()
