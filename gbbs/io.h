@@ -44,6 +44,7 @@ struct getFirst {
 std::pair<char*, size_t> mmapStringFromFile(const char* filename);
 
 void unmmap(const char* bytes, size_t bytes_size);
+char *map(size_t bytes_size);
 
 sequence<char> readStringFromFile(const char* fileName);
 

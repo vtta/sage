@@ -21,6 +21,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstring>
 #include <exception>
 #include <fstream>
 #include <string>
@@ -89,7 +90,7 @@ std::pair<char*, size_t> mmap_pmem(const char* filename) {
 // easy to generalize to more.
 template <class weight_type>
 symmetric_graph<csv_bytepd_amortized, weight_type>
-read_compressed_symmetric_graph(const char* f1, const char* f2) {
+read_compressed_symmetric_graph(const char *f1, const char *f2, bool cache) {
   auto [s0, s0_size] = mmap_pmem(f1);
   auto [s1, s1_size] = mmap_pmem(f2);
   if (s0_size != s1_size) {
@@ -103,6 +104,16 @@ read_compressed_symmetric_graph(const char* f1, const char* f2) {
   debug(uint64_t totalSpace = sizes[2];
   std::cout << "# n = " << n << " m = " << m << " totalSpace = " << totalSpace
             << "\n");
+
+  if (cache) {
+    char *olds0 = s0, *olds1 = s1;
+    s0 = gbbs_io::map(s0_size);
+    s1 = gbbs_io::map(s1_size);
+    memcpy(s0, olds0, s0_size);
+    memcpy(s1, olds1, s0_size);
+    gbbs_io::unmmap(olds0, s0_size);
+    gbbs_io::unmmap(olds1, s1_size);
+  }
 
   uintT* offsets = (uintT*)(s0 + 3 * sizeof(long));
   uint64_t skip = 3 * sizeof(long) + (n + 1) * sizeof(intT);

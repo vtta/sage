@@ -1,5 +1,6 @@
 #include "io.h"
 
+#include <cstdio>
 #include <fcntl.h>
 #if defined(__APPLE__)
 #else
@@ -53,6 +54,19 @@ void unmmap(const char* bytes, size_t bytes_size) {
       exit(-1);
     }
   }
+}
+
+char *map(size_t bytes_size) {
+  char *ret = nullptr;
+  if (bytes_size) {
+    ret = (char *)mmap(nullptr, bytes_size, PROT_NONE | PROT_READ | PROT_WRITE,
+                       MAP_PRIVATE | MAP_ANON | MAP_POPULATE, -1, 0);
+    if (ret == MAP_FAILED) {
+      perror("mmap");
+      exit(-1);
+    }
+  }
+  return ret;
 }
 
 sequence<char> readStringFromFile(const char* fileName) {
